@@ -27,7 +27,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173","http://localhost:3000",
-                                                      "https://oyster-app-5hwvw.ondigitalocean.app/","https://oasisuniformes.site", "https://www.oasisuniformes.site")); // Permitir todos los orígenes
+                                                      "https://oyster-app-5hwvw.ondigitalocean.app/","https://oasisuniformes.site", 
+                                                      "https://www.oasisuniformes.site","https://oyster-app-5hwvw.ondigitalocean.app")); // Permitir todos los orígenes
         configuration.setAllowedMethods(Arrays.asList("*"));// Permitir métodos específicos
         configuration.setAllowCredentials(true); // Permitir credenciales
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); // Permitir headers específicos
