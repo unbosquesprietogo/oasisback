@@ -1,7 +1,11 @@
 package com.oasisuniformes.inventario.service;
 
 import com.oasisuniformes.inventario.entity.Combo;
+import com.oasisuniformes.inventario.entity.Product;
 import com.oasisuniformes.inventario.entity.ProductCombo;
+import com.oasisuniformes.inventario.entity.ProductDetail;
+import com.oasisuniformes.inventario.model.request.ComboRequest;
+import com.oasisuniformes.inventario.model.request.ProductRequest;
 import com.oasisuniformes.inventario.repository.ComboRepository;
 import com.oasisuniformes.inventario.repository.ProductComboRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -23,12 +28,29 @@ public class ComboService {
     private ProductComboRepository productComboRepository;
 
 
-    public List<Combo> getAllCombos() {
-        return comboRepository.findAll();
+    public List<ComboRequest> getAllCombos() {
+        List<Combo> combos = comboRepository.findAll();
+        List<ComboRequest> comboRequests = new ArrayList<>();
+
+        for (Combo combo: combos){
+            comboRequests.add(new ComboRequest(combo.getId(),combo.getName(),combo.getPrice(),
+                    getCombosById(combo.getId())));
+        }
+        return comboRequests;
     }
 
-    public Optional<Combo> getComboById(Integer id) {
-        return comboRepository.findById(id);
+    public Optional<ComboRequest> getComboById(Integer id) {
+        Optional<Combo> comboOpt = comboRepository.findById(id);
+        ComboRequest comboRequest = new ComboRequest(comboOpt.get().getId(),comboOpt.get().getName(),
+                comboOpt.get().getPrice(),null);
+        if (comboOpt.isPresent()) {
+            Combo combo = comboOpt.get();
+            List<ProductCombo> productCombos = getCombosById(combo.getId());
+
+            comboRequest.setProductCombos(productCombos);
+            return Optional.of(comboRequest);
+        }
+        return Optional.of(comboRequest);
     }
 
     public  List<ProductCombo> getCombosById(Integer id){

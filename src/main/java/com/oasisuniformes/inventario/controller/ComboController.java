@@ -2,6 +2,7 @@ package com.oasisuniformes.inventario.controller;
 
 import com.oasisuniformes.inventario.entity.Combo;
 import com.oasisuniformes.inventario.entity.ProductCombo;
+import com.oasisuniformes.inventario.model.request.ComboRequest;
 import com.oasisuniformes.inventario.service.ComboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,13 +24,13 @@ public class ComboController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Combo>> getAllCombos() {
-        List<Combo> combos = comboService.getAllCombos();
+    public ResponseEntity<List<ComboRequest>> getAllCombos() {
+        List<ComboRequest> combos = comboService.getAllCombos();
         return new ResponseEntity<>(combos, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Combo> getComboById(@PathVariable Integer id) {
+    public ResponseEntity<ComboRequest> getComboById(@PathVariable Integer id) {
         return comboService.getComboById(id)
                 .map(combo -> new ResponseEntity<>(combo, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));

@@ -24,7 +24,6 @@ public class ProductDetail {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(columnDefinition = "INT UNSIGNED")
     private Integer quantity;
 
     private String size;
