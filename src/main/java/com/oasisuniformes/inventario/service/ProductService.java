@@ -2,6 +2,7 @@ package com.oasisuniformes.inventario.service;
 
 import com.oasisuniformes.inventario.entity.Product;
 import com.oasisuniformes.inventario.entity.ProductDetail;
+import com.oasisuniformes.inventario.model.request.PaginationResult;
 import com.oasisuniformes.inventario.model.request.ProductRequest;
 import com.oasisuniformes.inventario.repository.ProductDetailRepository;
 import com.oasisuniformes.inventario.repository.ProductRepository;
@@ -32,6 +33,68 @@ public class ProductService {
         }
         return productRequests;
     }
+
+    public List<ProductRequest> getFirstNProducts(int n) {
+
+        List<Product> products = productRepository.findAll();
+        List<ProductRequest> productRequests = new ArrayList<>();
+
+        int count = 0;
+
+        for (Product product : products) {
+            if (count >= n) {
+                break; // Sale del bucle si ya se han obtenido los primeros n productos
+            }
+
+            productRequests.add(new ProductRequest(
+                    product.getId(),
+                    product.getName(),
+                    product.getPrice(),
+                    product.getCategory(),
+                    getProductsDetailById(product.getId())
+            ));
+
+            count++;
+        }
+
+        return productRequests;
+    }
+
+    public PaginationResult getProductsByPagination(int start, int limit) {
+        return  getByPagination(start, limit, productRepository.findAll());
+    }
+
+    public PaginationResult getProductsByNameAndPagination(String searchQuery, int start, int limit) {
+       return getByPagination(start,limit,productRepository.findAllByNameContainingIgnoreCase(searchQuery));
+    }
+
+    public PaginationResult getByPagination(int start, int limit, List<Product> products) {
+
+
+        List<ProductRequest> productRequests = new ArrayList<>();
+
+
+        int startIndex = start;
+        int endIndex = start + limit;
+
+
+        for (int i = startIndex; i < endIndex && i < products.size(); i++) {
+            Product product = products.get(i);
+            productRequests.add(new ProductRequest(
+                    product.getId(),
+                    product.getName(),
+                    product.getPrice(),
+                    product.getCategory(),
+                    getProductsDetailById(product.getId())
+            ));
+        }
+
+        boolean isFirstPage = start == 0;
+        boolean isLastPage = endIndex >= products.size();
+
+        return new PaginationResult(productRequests, endIndex, isFirstPage, isLastPage);
+    }
+
 
     public Optional<ProductRequest> getProductById(Integer id) {
         Optional<Product> productOpt = productRepository.findById(id);

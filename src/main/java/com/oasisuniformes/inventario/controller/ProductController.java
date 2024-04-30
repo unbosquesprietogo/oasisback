@@ -2,6 +2,7 @@ package com.oasisuniformes.inventario.controller;
 
 import com.oasisuniformes.inventario.entity.Product;
 import com.oasisuniformes.inventario.entity.ProductDetail;
+import com.oasisuniformes.inventario.model.request.PaginationResult;
 import com.oasisuniformes.inventario.model.request.ProductRequest;
 import com.oasisuniformes.inventario.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,27 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting products: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/pagination")
+
+    public ResponseEntity<PaginationResult> getProductsByPagination(
+            @RequestParam(defaultValue = "0") int start,
+            @RequestParam(defaultValue = "10") int limit) {
+
+        PaginationResult result = productService.getProductsByPagination(start, limit);
+
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/pagination/name/{name}")
+    public ResponseEntity<PaginationResult> getProductsByPagination(
+            @RequestParam(defaultValue = "0") int start,
+            @RequestParam(defaultValue = "10") int limit, @PathVariable String name) {
+
+        PaginationResult result = productService.getProductsByNameAndPagination(name, start, limit);
+
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
