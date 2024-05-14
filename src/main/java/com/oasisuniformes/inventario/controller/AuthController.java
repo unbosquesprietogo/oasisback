@@ -2,13 +2,17 @@ package com.oasisuniformes.inventario.controller;
 
 import com.oasisuniformes.inventario.entity.Role;
 import com.oasisuniformes.inventario.model.request.LoginRequest;
+import com.oasisuniformes.inventario.model.request.ProductRequest;
 import com.oasisuniformes.inventario.model.request.RegisterRequest;
 import com.oasisuniformes.inventario.model.response.AuthResponse;
 import com.oasisuniformes.inventario.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,6 +33,17 @@ public class AuthController {
     @PostMapping(value ="/role")
     public ResponseEntity<Role> role(@RequestBody Role role){
         return ResponseEntity.ok(authService.createRole(role));
+    }
+
+    @GetMapping("role")
+    public ResponseEntity<?> getRoles() {
+
+        try {
+            List<Role> roleList = authService.getRoles();
+            return ResponseEntity.status(HttpStatus.OK).body(roleList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting roles: " + e.getMessage());
+        }
     }
 
 

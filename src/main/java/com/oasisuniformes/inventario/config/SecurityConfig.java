@@ -26,7 +26,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173","http://localhost:3000",
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173","http://localhost:3000","http://172.206.25.83",
                                                       "https://oyster-app-5hwvw.ondigitalocean.app/","https://oasisuniformes.site", 
                                                       "https://www.oasisuniformes.site","https://oyster-app-5hwvw.ondigitalocean.app")); // Permitir todos los orígenes
         configuration.setAllowedMethods(Arrays.asList("*"));// Permitir métodos específicos

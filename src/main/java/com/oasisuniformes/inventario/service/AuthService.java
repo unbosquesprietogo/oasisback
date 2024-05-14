@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -61,5 +63,9 @@ public class AuthService {
                 .build();
 
     }
+
+    public List<Role> getRoles() {
+        return roleRepository.findAll();
+    };
 
 }
